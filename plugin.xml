@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.imp.runtime.languageDescription">
+      <language
+            extensions="impp"
+            description="IMP Presentation Specification"
+            language="impp">
+      </language>
+   </extension>
+   <extension
+         id="org.eclipse.imp.presentation.parserWrapper"
+         name="impp Parser Wrapper"
+         point="org.eclipse.imp.runtime.parser">
+      <parserWrapper
+            class="org.eclipse.imp.presentation.parser.ImppParseController"
+            language="impp">
+      </parserWrapper>
+   </extension>
+   <extension
+         point="org.eclipse.imp.runtime.outliner">
+      <outliner
+            class="org.eclipse.imp.presentation.outliner.ImppOutliner"
+            language="impp">
+      </outliner>
+   </extension>
+   <extension
+         point="org.eclipse.imp.runtime.tokenColorer">
+      <tokenColorer
+            class="org.eclipse.imp.presentation.tokenColorer.ImppTokenColorer"
+            language="impp">
+      </tokenColorer>
+   </extension>
+   <extension
+         point="org.eclipse.imp.runtime.foldingUpdater">
+      <foldingUpdater
+            class="org.eclipse.imp.presentation.foldingUpdater.ImppFoldingUpdater"
+            language="impp">
+      </foldingUpdater>
+   </extension>
+   <extension
+         id="impp.builder"
+         name="impp builder"
+         point="org.eclipse.core.resources.builders">
+      <builder>
+         <run
+               class="org.eclipse.imp.presentation.builders.ImppBuilder">
+            <parameter
+                  name="foo"
+                  value="bar">
+            </parameter>
+         </run>
+      </builder>
+   </extension>
+   <extension
+         id="nature"
+         name="impp Nature"
+         point="org.eclipse.core.resources.natures">
+      <builder
+            id="org.eclipse.imp.presentation.impp.safari.builder">
+      </builder>
+      <runtime>
+         <run
+               class="org.eclipse.imp.presentation.builders.ImppNature">
+         </run>
+      </runtime>
+   </extension>
+   <extension
+         id="impp.safari.builder.problem"
+         name="impp Error"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+   </extension>
+   <extension
+         point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            objectClass="org.eclipse.jdt.core.IJavaProject"
+            adaptable="false"
+            nameFilter="*"
+            id="impp.safari.projectContextMenu">
+         <action
+               label="Enable impp Builder"
+               tooltip="Enable the impp builder for this project"
+               class="org.eclipse.imp.presentation.actions.EnableNature"
+               id="impp.safari.actions.enableNatureAction">
+         </action>
+      </objectContribution>
+   </extension>
+
+</plugin>
