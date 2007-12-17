@@ -4,6 +4,7 @@ import org.eclipse.imp.parser.IParseController;
 import org.eclipse.imp.presentation.parser.ImppParsersym;
 import org.eclipse.imp.services.ITokenColorer;
 import org.eclipse.imp.services.base.TokenColorerBase;
+import org.eclipse.jface.text.IRegion;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
@@ -15,7 +16,8 @@ public class ImppTokenColorer extends TokenColorerBase implements ImppParsersym,
 
     TextAttribute commentAttribute, keywordAttribute, stringAttribute, numberAttribute, doubleAttribute, identifierAttribute;
 
-    public TextAttribute getColoring(IParseController controller, IToken token) {
+    public TextAttribute getColoring(IParseController controller, Object o) {
+        IToken token= (IToken) o;
 	switch (token.getKind()) {
 	// START_HERE
 	case TK_IDENTIFIER:
@@ -45,4 +47,7 @@ public class ImppTokenColorer extends TokenColorerBase implements ImppParsersym,
 	keywordAttribute= new TextAttribute(display.getSystemColor(SWT.COLOR_DARK_MAGENTA), null, SWT.BOLD);
     }
 
+    public IRegion calculateDamageExtent(IRegion seed) {
+        return seed;
+    }
 }

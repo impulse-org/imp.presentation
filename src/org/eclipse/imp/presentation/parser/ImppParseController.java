@@ -5,18 +5,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-
-import lpg.runtime.IMessageHandler;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.imp.language.ILanguageSyntaxProperties;
 import org.eclipse.imp.model.ISourceProject;
-import org.eclipse.imp.parser.IASTNodeLocator;
 import org.eclipse.imp.parser.ILexer;
+import org.eclipse.imp.parser.IMessageHandler;
 import org.eclipse.imp.parser.IParseController;
 import org.eclipse.imp.parser.IParser;
+import org.eclipse.imp.parser.ISourcePositionLocator;
+import org.eclipse.imp.parser.MessageHandlerAdapter;
 import org.eclipse.imp.parser.SimpleLPGParseController;
 import org.eclipse.imp.presentation.Activator;
 import org.eclipse.imp.presentation.parser.Ast.ASTNode;
@@ -33,9 +32,7 @@ public class ImppParseController extends SimpleLPGParseController implements IPa
 
     private ImppLexer lexer;
 
-    private char keywords[][];
-
-    private boolean isKeyword[];
+    public ImppParseController() { }
 
     /**
      * @param filePath		Project-relative path of file
@@ -48,7 +45,7 @@ public class ImppParseController extends SimpleLPGParseController implements IPa
 	IPath fullFilePath= project.getRawProject().getLocation().append(filePath);
 	createLexerAndParser(fullFilePath);
 
-	parser.setMessageHandler(handler);
+	parser.setMessageHandler(new MessageHandlerAdapter(handler));
     }
 
     public IParser getParser() {
@@ -59,11 +56,12 @@ public class ImppParseController extends SimpleLPGParseController implements IPa
 	return lexer;
     }
 
-    public IASTNodeLocator getNodeLocator() {
+    public ISourcePositionLocator getNodeLocator() {
 	return new ImppASTNodeLocator();
-    } //return new AstLocator(); }
+    }
 
-    public ImppParseController() {
+    public ILanguageSyntaxProperties getSyntaxProperties() {
+        return new ImppSyntaxProperties();
     }
 
     private void createLexerAndParser(IPath filePath) {
@@ -115,10 +113,6 @@ public class ImppParseController extends SimpleLPGParseController implements IPa
 	cacheKeywordsOnce();
 
 	return fCurrentAst;
-    }
-
-    public String getSingleLineCommentPrefix() {
-	return "//";
     }
 
 //    public List<IParseFragment> getEmbeddedFragments() {
