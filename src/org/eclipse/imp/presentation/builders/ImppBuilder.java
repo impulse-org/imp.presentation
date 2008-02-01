@@ -1,5 +1,6 @@
 package org.eclipse.imp.presentation.builders;
 
+import java.util.Collection;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -66,7 +67,7 @@ public class ImppBuilder extends BuilderBase {
 
     public static final Language LANGUAGE= LanguageRegistry.findLanguage(LANGUAGE_NAME);
 
-    public static final String[] EXTENSIONS= LANGUAGE.getFilenameExtensions();
+    public static final Collection<String> EXTENSIONS= LANGUAGE.getFilenameExtensions();
 
     protected PluginBase getPlugin() {
 	//return ImppPlugin.getInstance();
@@ -97,8 +98,8 @@ public class ImppBuilder extends BuilderBase {
 	if (pathString.indexOf("/bin/") != -1)
 	    return false;
 
-	for(int i= 0; i < EXTENSIONS.length; i++) {
-	    if (EXTENSIONS[i].equals(path.getFileExtension()))
+        for(String ext: EXTENSIONS) {
+	    if (ext.equals(path.getFileExtension()))
 		return true;
 	}
 	return false;
