@@ -8,7 +8,6 @@ import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.imp.language.ILanguageSyntaxProperties;
 import org.eclipse.imp.model.ISourceProject;
 import org.eclipse.imp.parser.ILexer;
 import org.eclipse.imp.parser.IMessageHandler;
@@ -19,6 +18,7 @@ import org.eclipse.imp.parser.MessageHandlerAdapter;
 import org.eclipse.imp.parser.SimpleLPGParseController;
 import org.eclipse.imp.presentation.Activator;
 import org.eclipse.imp.presentation.parser.Ast.ASTNode;
+import org.eclipse.imp.services.ILanguageSyntaxProperties;
 import org.eclipse.imp.utils.StreamUtils;
 
 /**

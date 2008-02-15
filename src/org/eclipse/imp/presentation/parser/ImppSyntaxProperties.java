@@ -1,6 +1,6 @@
 package org.eclipse.imp.presentation.parser;
 
-import org.eclipse.imp.language.ILanguageSyntaxProperties;
+import org.eclipse.imp.services.ILanguageSyntaxProperties;
 
 public class ImppSyntaxProperties implements ILanguageSyntaxProperties {
 
