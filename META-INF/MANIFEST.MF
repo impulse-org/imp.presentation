@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: IMP Presentation Specifications
+Bundle-Name: IMP Presentation Specifications (Incubation)
 Bundle-SymbolicName: org.eclipse.imp.presentation;singleton:=true
 Bundle-Version: 1.0.61
 Bundle-Activator: org.eclipse.imp.presentation.Activator
