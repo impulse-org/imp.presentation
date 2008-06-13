@@ -32,7 +32,9 @@ public class ImppParseController extends SimpleLPGParseController implements IPa
 
     private ImppLexer lexer;
 
-    public ImppParseController() { }
+    public ImppParseController() {
+        super(Activator.kLanguageName);
+    }
 
     /**
      * @param filePath		Project-relative path of file
