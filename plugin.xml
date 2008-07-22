@@ -11,13 +11,13 @@
       </language>
    </extension>
    <extension
-         id="org.eclipse.imp.presentation.parserWrapper"
-         name="impp Parser Wrapper"
+         id="org.eclipse.imp.presentation.parser"
+         name="IMP Presentation Specification Parser"
          point="org.eclipse.imp.runtime.parser">
-      <parserWrapper
+      <parser
             class="org.eclipse.imp.presentation.parser.ImppParseController"
             language="impp">
-      </parserWrapper>
+      </parser>
    </extension>
    <extension
          point="org.eclipse.imp.runtime.outliner">
