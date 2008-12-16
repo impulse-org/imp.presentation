@@ -1,67 +1,105 @@
-package java.uide.views;
+package org.eclipse.imp.java.editor;
 
 import polyglot.ast.*;
 
-presentation Java {
-    icon staticIcon    = "icons/static.gif";
-    icon finalIcon     = "icons/final.gif";
-    icon publicIcon    = "icons/public.gif";
-    icon privateIcon   = "icons/private.gif";
-    icon protectedIcon = "icons/protected.gif";
+language Java {
     icon packageIcon   = "icons/package.gif";
 
-    set modifierIcons(Declaration decl) {
-          {: decl.modifiers().isStatic()    -> staticIcon :} +
-          {: decl.modifiers().isFinal()     -> finalIcon  :} +
+    icon staticModIcon = "icons/static.gif";
+    icon finalModIcon  = "icons/final.gif";
 
-          {: decl.modifiers().isPublic()    -> publicIcon    :} +
-          {: decl.modifiers().isPrivate()   -> privateIcon   :} +
-          {: decl.modifiers().isProtected() -> protectedIcon :} +
-          {: decl.modifiers().isPackage()   -> packageIcon   :};
+    icon publicClassIcon     = "icons/publicClass.gif";
+    icon privateClassIcon    = "icons/privateClass.gif";
+    icon protectedClassIcon  = "icons/protectedClass.gif";
+    icon packageClassIcon    = "icons/packageClass.gif";
+
+    icon publicInterfaceIcon    = "icons/publicInterface.gif";
+    icon privateInterfaceIcon   = "icons/privateInterface.gif";
+    icon protectedInterfaceIcon = "icons/protectedInterface.gif";
+    icon packageInterfaceIcon   = "icons/packageInterface.gif";
+
+    icon publicFieldIcon     = "icons/publicField.gif";
+    icon privateFieldIcon    = "icons/privateField.gif";
+    icon protectedFieldIcon  = "icons/protectedField.gif";
+    icon packageFieldIcon    = "icons/packageField.gif";
+
+    icon publicMethodIcon    = "icons/publicMethod.gif";
+    icon privateMethodIcon   = "icons/privateMethod.gif";
+    icon protectedMethodIcon = "icons/protectedMethod.gif";
+    icon packageMethodIcon   = "icons/packageMethod.gif";
+
+    icon classIcon(Flags f) {
+        case { {: f.isPublic()    :} -> publicClassIcon,
+               {: f.isPackage()   :} -> packageClassIcon,
+               {: f.isProtected() :} -> protectedClassIcon,
+               {: f.isPrivate()   :} -> privateClassIcon }
     }
 
-    tree JavaDeclPresentation { // generates ILabelProvider and IImageProvider implementations
-        node type = {
-            label = type.name();
-            icon  = modifierIcons(type);
+    icon interfaceIcon(Flags f) {
+        case { {: f.isPublic()    :} -> publicInterfaceIcon,
+               {: f.isPackage()   :} -> packageInterfaceIcon,
+               {: f.isProtected() :} -> protectedInterfaceIcon,
+               {: f.isPrivate()   :} -> privateInterfaceIcon }
+    }
+
+    icon fieldIcon(Flags f) {
+        case { {: f.isPublic()    :} -> publicFieldIcon,
+               {: f.isPackage()   :} -> packageFieldIcon,
+               {: f.isProtected() :} -> protectedFieldIcon,
+               {: f.isPrivate()   :} -> privateFieldIcon }
+    }
+
+    icon methodIcon(Flags f) {
+        case { {: f.isPublic()    :} -> publicMethodIcon,
+               {: f.isPackage()   :} -> packageMethodIcon,
+               {: f.isProtected() :} -> protectedMethodIcon,
+               {: f.isPrivate()   :} -> privateMethodIcon }
+    }
+
+    icon decoratedIcon(Flags f, icon i) {
+        i +
+        case { {: f.isStatic() :} -> staticIcon } +
+        case { {: f.isFinal()  :} -> finalIcon  }
+    }
+
+    presentation { // generates ILabelProvider implementation
+        Type t = {
+            label = t.name();
+            icon  = t.isInterface() ? decoratedIcon(t.flags(), interfaceIcon(t)) : decoratedIcon(t.flags(), classIcon(t));
         }
-        node method = {
-            label = method.name() + method.signature();
-            icon  = modifierIcons(method);
+        MethodDecl m = {
+            label = m.name() + m.signature();
+            icon  = decoratedIcon(m.flags(), methodIcon(m.flags()));
         }
-        node field = {
-            label = field.name();
-            icon  = modifierIcons(field);
+        FieldDecl f = {
+            label = f.name();
+            icon  = decoratedIcon(f.flags(), fieldIcon(f.flags()));
         }
     }
 
-    outline Outline extends Language.Outline { // no implicit derivation; default is override
-        use JavaDeclPresentation;
-        node type;
-        node method;
-        node field;
-    }
-
-    text JavaKeywordPresentation { // generates IOutliner implementation
+    text { // generates ITokenColorer
         font normal = "courier";
-        token keyword = {
+        keyword = {
             color = "blue";
             font  = normal;
             style = { bold };
         }
-        token comment = {
+        comment = {
             color = "green";
             font  = normal;
             style = { italic };
         }
-        token string = {
+        string = {
             color = "red";
             font  = normal;
             style = { bold, italic };
         }
     }
 
-    editor JavaEditor extends Editor {
-        use JavaKeywordPresentation;
+    outline { // generates TreeModelBuilder implementation
+        node PackageDecl;
+        node Type;
+        node MethodDecl;
+        node FieldDecl;
     }
 }
