@@ -5,15 +5,15 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.imp.services.IOutlineImage;
 
-public class ImppImages implements IOutlineImage {
-    private ImppImages() {
+public class PSPImages implements IOutlineImage {
+    private PSPImages() {
     }
 
     private static IOutlineImage image= null;
 
     public static IOutlineImage getImppImages() {
 	if (image == null) {
-	    image= new ImppImages();
+	    image= new PSPImages();
 	}
 	return image;
     }

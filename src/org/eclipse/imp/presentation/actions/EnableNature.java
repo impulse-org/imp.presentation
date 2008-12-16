@@ -1,7 +1,7 @@
 package org.eclipse.imp.presentation.actions;
 
 import org.eclipse.core.resources.IProject;
-import org.eclipse.imp.presentation.builders.ImppNature;
+import org.eclipse.imp.presentation.builders.PSPNature;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
@@ -20,7 +20,7 @@ public class EnableNature implements IWorkbenchWindowActionDelegate {
     public void init(IWorkbenchWindow window) {}
 
     public void run(IAction action) {
-	new ImppNature().addToProject(fProject);
+	new PSPNature().addToProject(fProject);
     }
 
     public void selectionChanged(IAction action, ISelection selection) {
