@@ -2,7 +2,7 @@ package org.eclipse.imp.presentation.parser;
 
 import org.eclipse.imp.services.ILanguageSyntaxProperties;
 
-public class ImppSyntaxProperties implements ILanguageSyntaxProperties {
+public class PSPSyntaxProperties implements ILanguageSyntaxProperties {
 
     public String getBlockCommentEnd() {
         return null;

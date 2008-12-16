@@ -1,6 +1,6 @@
 %options package=org.eclipse.imp.presentation.parser
 %options template=LexerTemplate.gi
-%options filter=ImppKWLexer.gi
+%options filter=PSPKWLexer.gi
 
 %Globals
     /.import java.util.*;
@@ -10,7 +10,7 @@
 
 %Define
     $additional_interfaces /., ILexer./
-    $kw_lexer_class /.$ImppKWLexer./
+    $kw_lexer_class /.$PSPKWLexer./
 %End
 
 %Include
@@ -18,40 +18,24 @@
 %End
 
 %Export
-    SINGLE_LINE_COMMENT
-    IDENTIFIER
-    INTEGER
-    STRING_LITERAL
     ARROW
-    SET_LBRACK
-    SET_RBRACK
     COMMA
     COLON
-    SEMICOLON
     DOT
-    PLUS
-    MINUS
-    TIMES
-    DIVIDE
-    PLUSPLUS
-    MINUSMINUS
-    BIT_OR
-    BIT_AND
-    LOG_OR
-    LOG_AND
-    BIT_NOT
-    LOG_NOT
-    LESS
-    LESSEQ
     EQUAL
-    EQUALS
-    NOTEQ
-    GREATEREQ
-    GREATER
-    LEFTPAREN
-    RIGHTPAREN
+    IDENTIFIER
+    INTEGER
+    JAVA_EXPR
     LEFTBRACE
+    LEFTPAREN
+    MINUS
+    PLUS
     RIGHTBRACE
+    RIGHTPAREN
+    SEMICOLON
+    SINGLE_LINE_COMMENT
+    STRING_LITERAL
+    TIMES
 %End
 
 %Terminals
@@ -157,11 +141,6 @@
                     makeToken($_DOT);
           $EndJava./
 
-    Token ::= '='
-        /.$BeginJava
-                    makeToken($_EQUAL);
-          $EndJava./
-
     Token ::= '('
         /.$BeginJava
                     makeToken($_LEFTPAREN);
@@ -187,89 +166,19 @@
                     makeToken($_PLUS);
           $EndJava./
 
-    Token ::= '-'
-        /.$BeginJava
-                    makeToken($_MINUS);
-          $EndJava./
-
     Token ::= '*'
         /.$BeginJava
                     makeToken($_TIMES);
           $EndJava./
 
-    Token ::= '/'
+    Token ::= '-'
         /.$BeginJava
-                    makeToken($_DIVIDE);
+                    makeToken($_MINUS);
           $EndJava./
 
-    Token ::= '+' '+'
+    Token ::= '='
         /.$BeginJava
-                    makeToken($_PLUSPLUS);
-          $EndJava./
-
-    Token ::= '-' '-'
-        /.$BeginJava
-                    makeToken($_MINUSMINUS);
-          $EndJava./
-
-    Token ::= '^'
-        /.$BeginJava
-                    makeToken($_BIT_NOT);
-          $EndJava./
-
-    Token ::= '!'
-        /.$BeginJava
-                    makeToken($_LOG_NOT);
-          $EndJava./
-
-    Token ::= '&'
-        /.$BeginJava
-                    makeToken($_BIT_AND);
-          $EndJava./
-
-    Token ::= '|'
-        /.$BeginJava
-                    makeToken($_BIT_OR);
-          $EndJava./
-
-    Token ::= '|' '|'
-        /.$BeginJava
-                    makeToken($_LOG_OR);
-          $EndJava./
-
-    Token ::= '&' '&'
-        /.$BeginJava
-                    makeToken($_LOG_AND);
-          $EndJava./
-
-    Token ::= '<'
-        /.$BeginJava
-                    makeToken($_LESS);
-          $EndJava./
-
-    Token ::= '<' '='
-        /.$BeginJava
-                    makeToken($_LESSEQ);
-          $EndJava./
-
-    Token ::= '=' '='
-        /.$BeginJava
-                    makeToken($_EQUALS);
-          $EndJava./
-
-    Token ::= '!' '='
-        /.$BeginJava
-                    makeToken($_NOTEQ);
-          $EndJava./
-
-    Token ::= '>' '='
-        /.$BeginJava
-                    makeToken($_GREATEREQ);
-          $EndJava./
-
-    Token ::= '>'
-        /.$BeginJava
-                    makeToken($_GREATER);
+                    makeToken($_EQUAL);
           $EndJava./
 
     Token ::= '-' '>'
@@ -277,19 +186,26 @@
                     makeToken($_ARROW);
           $EndJava./
 
-    Token ::= '{' ':'
+    Token ::= javaExpr
         /.$BeginJava
-                    makeToken($_SET_LBRACK);
+                    makeToken($_JAVA_EXPR);
           $EndJava./
 
-    Token ::= ':' '}'
-        /.$BeginJava
-                    makeToken($_SET_RBRACK);
-          $EndJava./
+    javaExpr ::= '{' ':' javaExprMiddle ':' '}'
+
+    javaExprMiddle ::=
+          anyButColon
+        | javaExprMiddle anyButColon
+        | javaExprMiddle ':' anyButRBrace
+
+    anyButColon ::= digit | letter | whiteChar | specialNoColon
+
+    anyButRBrace ::= digit | letter | whiteChar | specialNoRBrace
 
     identifier -> letter
                 | identifier letter
                 | identifier digit
+                | identifier '_'
 
     integer ::= digit
              | integer digit
@@ -353,8 +269,20 @@
                 '/' | '$'
 
     specialNotDQ ::=
-                '+' | '-' | '(' | ')' |     | '!' | '@' | '`' | '~' | '.' |
+                '+' | '-' | '(' | ')' |       '!' | '@' | '`' | '~' | '.' |
                 '%' | '&' | '^' | ':' | ';' | "'" | '\' | '|' | '{' | '}' |
+                '[' | ']' | '?' | ',' | '<' | '>' | '=' | '#' | '*' | '_' |
+                '/' | '$'
+
+    specialNoColon ::=
+                '+' | '-' | '(' | ')' | '"' | '!' | '@' | '`' | '~' | '.' |
+                '%' | '&' | '^' |       ';' | "'" | '\' | '|' | '{' | '}' |
+                '[' | ']' | '?' | ',' | '<' | '>' | '=' | '#' | '*' | '_' |
+                '/' | '$'
+
+    specialNoRBrace ::=
+                '+' | '-' | '(' | ')' | '"' | '!' | '@' | '`' | '~' | '.' |
+                '%' | '&' | '^' | ':' | ';' | "'" | '\' | '|' | '{' |
                 '[' | ']' | '?' | ',' | '<' | '>' | '=' | '#' | '*' | '_' |
                 '/' | '$'
 

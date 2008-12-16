@@ -8,9 +8,10 @@
 %Export
     BOLD
     BOOLEAN
+    CASE
     COLOR
-    EDITOR
     EXTENDS
+    FOLDABLE
     FONT
     ICON
     IMPORT
@@ -18,20 +19,15 @@
     ITALIC
     LABEL
     LANGUAGE
-    LEAF
     NODE
     OUTLINE
     PACKAGE
     PRESENTATION
     REGULAR
-    RETURN
-    SET
     STYLE
     TEXT
     TOKEN
-    TREE
-    UNDER
-    USE
+    UNDERLINE
 %End
 
 %Terminals
@@ -56,21 +52,27 @@
           $EndAction
         ./
 
+    Keyword ::= c a s e
+        /.$BeginAction
+            $setResult($_CASE);
+          $EndAction
+        ./
+
     Keyword ::= c o l o r
         /.$BeginAction
             $setResult($_COLOR);
           $EndAction
         ./
         
-    Keyword ::= e d i t o r
-        /.$BeginAction
-            $setResult($_EDITOR);
-          $EndAction
-        ./
-
     Keyword ::= e x t e n d s
         /.$BeginAction
             $setResult($_EXTENDS);
+          $EndAction
+        ./
+
+    Keyword ::= f o l d a b l e
+        /.$BeginAction
+            $setResult($_FOLDABLE);
           $EndAction
         ./
 
@@ -116,12 +118,6 @@
           $EndAction
         ./
 
-    Keyword ::= l e a f
-        /.$BeginAction
-            $setResult($_LEAF);
-          $EndAction
-        ./
-
     Keyword ::= n o d e
         /.$BeginAction
             $setResult($_NODE);
@@ -152,18 +148,6 @@
           $EndAction
         ./
 
-    Keyword ::= r e t u r n
-        /.$BeginAction
-            $setResult($_RETURN);
-          $EndAction
-        ./
-
-    Keyword ::= s e t
-        /.$BeginAction
-            $setResult($_SET);
-          $EndAction
-        ./
-
     Keyword ::= s t y l e
         /.$BeginAction
             $setResult($_STYLE);
@@ -182,21 +166,9 @@
           $EndAction
         ./
 
-    Keyword ::= t r e e
+    Keyword ::= u n d e r l i n e
         /.$BeginAction
-            $setResult($_TREE);
-          $EndAction
-        ./
-
-    Keyword ::= u n d e r
-        /.$BeginAction
-            $setResult($_UNDER);
-          $EndAction
-        ./
-
-    Keyword ::= u s e
-        /.$BeginAction
-            $setResult($_USE);
+            $setResult($_UNDERLINE);
           $EndAction
         ./
 %End
