@@ -95,18 +95,6 @@ public class PSPParseController extends SimpleLPGParseController implements IPar
         lexer.initialize(contentsArray, fFilePath.toPortableString());
         parser.getParseStream().resetTokenStream();
 
-        // SMS 28 Mar 2007
-        // Commenting out to prevent clobbering of markers set by previous
-        // builders in the same build phase. This will also give behavior
-        // that is more consistent with the handling of markers in the JDT.
-        // IResource file = project.getFile(filePath);
-        // try {
-        // file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-        // } catch(CoreException e) {
-        // System.err.println("imppParseController.parse: caught CoreException while deleting problem markers;
-        // continuing to parse regardless");
-        // }
-
         lexer.lexer(my_monitor, parser.getParseStream()); // Lex the stream to produce the token stream
         if (my_monitor.isCancelled())
             return fCurrentAst; // TODO fCurrentAst might (probably will) be inconsistent wrt the lex stream now
