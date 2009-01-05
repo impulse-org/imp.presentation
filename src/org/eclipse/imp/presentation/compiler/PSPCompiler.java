@@ -15,14 +15,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceProxy;
+import org.eclipse.core.resources.IResourceProxyVisitor;
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.imp.builder.MarkerCreator;
 import org.eclipse.imp.language.ILanguageService;
 import org.eclipse.imp.language.Language;
@@ -657,9 +664,75 @@ public class PSPCompiler {
         subs.put("$PARSER_PKG$", fParseCtlrPkg);
         subs.put("$PARSE_CONTROLLER_CLASS_NAME$", fParseCtlrName);
 
-        String classNamePrefix= Character.toUpperCase(langName.charAt(0)) + langName.substring(1).toLowerCase();
-        subs.put("$PARSER_SYMBOL_CLASS_NAME$", classNamePrefix + "Parsersym"); // TODO figure this out from the generated code
-        subs.put("$AST_NODE$", "ASTNode"); // TODO Figure this out from the generated code
+        IFile grammarFile= findSourceFile(fParseCtlrPkg, ".*\\.g$");
+        Map<String,String> grammarOptions= readOptionsFromGrammar(grammarFile);
+        String grammarFileName= grammarFile.getName();
+        String filePrefix= grammarOptions.containsKey("fp") ? grammarOptions.get("fp") : (grammarFileName.substring(0, grammarFileName.length() - grammarFile.getFileExtension().length() - 1));
+
+        subs.put("$PARSER_SYMBOL_CLASS_NAME$", filePrefix + "sym");
+        subs.put("$AST_NODE$", grammarOptions.containsKey("ast_type") ? grammarOptions.get("ast_type") : "ASTNode");
+    }
+
+    private Map<String, String> readOptionsFromGrammar(IFile grammarFile) {
+        Map<String,String> result= new HashMap<String, String>();
+        try {
+            String contents= StreamUtils.readStreamContents(grammarFile.getContents());
+            String[] lines= contents.split(System.getProperty("line.separator"));
+            for(int i= 0; i < lines.length; i++) {
+                String line= lines[i];
+                if (line.trim().startsWith("%options ")) {
+                    String[] options= line.substring(9).split(",");
+                    for(int j= 0; j < options.length; j++) {
+                        String option= options[j];
+                        String name, value;
+                        int eqIdx= option.indexOf('=');
+                        if (eqIdx > 0) {
+                            name= option.substring(0, eqIdx);
+                            value= option.substring(eqIdx+1);
+                        } else {
+                            name= option;
+                            value= "";
+                        }
+                        result.put(name, value);
+                    }
+                }
+            }
+        } catch (CoreException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    private IFile findSourceFile(String parseCtlrPkg, String regex) {
+        final IFile[] result= new IFile[1];
+        try {
+            IJavaProject javaProject= JavaCore.create(fProject);
+            IClasspathEntry[] cpEntries= javaProject.getResolvedClasspath(true);
+            final Pattern pat= Pattern.compile(regex);
+            IPath parseCtlrFolder= new Path(parseCtlrPkg.replace('.', File.separatorChar));
+            IWorkspace ws= fProject.getWorkspace();
+            for(int i= 0; i < cpEntries.length; i++) {
+                IClasspathEntry entry= cpEntries[i];
+                if (entry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
+                    IPath entryPath= entry.getPath();
+                    IResource pkgMember= ws.getRoot().findMember(entryPath.append(parseCtlrFolder));
+                    if (pkgMember != null && pkgMember.exists()) {
+                        pkgMember.accept(new IResourceProxyVisitor() {
+                            public boolean visit(IResourceProxy proxy) throws CoreException {
+                                if (proxy.getType() == IResource.FILE &&  pat.matcher(proxy.getName()).matches()) {
+                                    result[0]= (IFile) proxy.requestResource();
+                                }
+                                return true;
+                            }
+                        },
+                        0);
+                    }
+                }
+            }
+        } catch (CoreException e) {
+            // ...
+        }
+        return result[0];
     }
 
     private String buildImports(compilationUnit astRoot) {
