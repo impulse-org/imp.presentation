@@ -43,6 +43,6 @@ public class $FOLDER_CLASS_NAME$ extends LPGFolderBase {
         AbstractVisitor abstractVisitor= new FoldingVisitor();
 
         theAST.accept(abstractVisitor);
-        makeAdjunctAnnotations(theAST);     
+        makeAdjunctAnnotations();     
     }
 }
