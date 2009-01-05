@@ -1,0 +1,57 @@
+package org.eclipse.imp.leg;
+
+import leg.imp.parser.Ast.*;
+ 
+language LEG {
+    presentation {
+        icon funcIcon  = "function.gif";
+        icon blockIcon = "block.gif";
+        icon declIcon  = "decl.gif";
+
+        functionDeclaration f = {
+            label = {: f.getfunctionHeader().getidentifier().toString() :};
+            icon  = funcIcon;
+        }
+        block b = {
+            label = "Block";
+            icon  = blockIcon;
+        }
+        declarationStmt0 d = {
+            label = {: d.getdeclaration().getprimitiveType() + " " + d.getdeclaration().getidentifier().toString() :};
+            icon  = declIcon;
+        }
+    }
+
+    text {
+        font normal = "courier";
+        IDENTIFIER = {
+            color = "BLUE";
+            font  = normal;
+            style = { bold };
+        }
+        NUMBER = {
+            color = "RED";
+            style = { regular };
+        }
+        DoubleLiteral = {
+            color = "YELLOW";
+            style = { regular };
+        }
+        SINGLE_LINE_COMMENT = {
+            color = "GREEN";
+            font  = normal;
+            style = { italic };
+        }
+    }
+
+    outline {
+        node functionDeclaration;
+        node block;
+        node declarationStmt0;
+        node declarationStmt1;
+    }
+
+    foldable {
+        node functionDeclaration;
+    }
+}
