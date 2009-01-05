@@ -39,7 +39,7 @@ public class PSPTreeModelBuilder extends TreeModelBuilderBase
             popSubItem();
         }
 
-        public boolean visit(presentationMember n) {
+        public boolean visit(nodePresentation n) {
             createSubItem(n);
             return true;
         }

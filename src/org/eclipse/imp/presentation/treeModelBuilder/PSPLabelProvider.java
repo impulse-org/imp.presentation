@@ -86,8 +86,8 @@ public class PSPLabelProvider implements ILabelProvider
         if (n instanceof outlineSpec) {
             return "outline";
         }
-        if (n instanceof presentationMember) {
-            return ((presentationMember) n).gettype().toString();
+        if (n instanceof nodePresentation) {
+            return ((nodePresentation) n).gettype().toString();
         }
         if (n instanceof foldingSpec) {
             return "foldable";
