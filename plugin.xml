@@ -5,9 +5,9 @@
    <extension
          point="org.eclipse.imp.runtime.languageDescription">
       <language
-            extensions="impp"
+            extensions="psp"
             description="IMP Presentation Specification"
-            language="impp">
+            language="psp">
       </language>
    </extension>
    <extension
@@ -15,38 +15,31 @@
          name="IMP Presentation Specification Parser"
          point="org.eclipse.imp.runtime.parser">
       <parser
-            class="org.eclipse.imp.presentation.parser.ImppParseController"
-            language="impp">
+            class="org.eclipse.imp.presentation.parser.PSPParseController"
+            language="psp">
       </parser>
-   </extension>
-   <extension
-         point="org.eclipse.imp.runtime.outliner">
-      <outliner
-            class="org.eclipse.imp.presentation.outliner.ImppOutliner"
-            language="impp">
-      </outliner>
    </extension>
    <extension
          point="org.eclipse.imp.runtime.tokenColorer">
       <tokenColorer
-            class="org.eclipse.imp.presentation.tokenColorer.ImppTokenColorer"
-            language="impp">
+            class="org.eclipse.imp.presentation.tokenColorer.PSPTokenColorer"
+            language="psp">
       </tokenColorer>
    </extension>
    <extension
          point="org.eclipse.imp.runtime.foldingUpdater">
       <foldingUpdater
-            class="org.eclipse.imp.presentation.foldingUpdater.ImppFoldingUpdater"
-            language="impp">
+            class="org.eclipse.imp.presentation.foldingUpdater.PSPFoldingUpdater"
+            language="psp">
       </foldingUpdater>
    </extension>
    <extension
-         id="impp.builder"
-         name="impp builder"
+         id="builder"
+         name="IMP Presentation Specification builder"
          point="org.eclipse.core.resources.builders">
       <builder>
          <run
-               class="org.eclipse.imp.presentation.builders.ImppBuilder">
+               class="org.eclipse.imp.presentation.builders.PSPBuilder">
             <parameter
                   name="foo"
                   value="bar">
@@ -56,20 +49,20 @@
    </extension>
    <extension
          id="nature"
-         name="impp Nature"
+         name="Presentation Specification Nature"
          point="org.eclipse.core.resources.natures">
       <builder
-            id="org.eclipse.imp.presentation.impp.safari.builder">
+            id="org.eclipse.imp.presentation.builder">
       </builder>
       <runtime>
          <run
-               class="org.eclipse.imp.presentation.builders.ImppNature">
+               class="org.eclipse.imp.presentation.builders.PSPNature">
          </run>
       </runtime>
    </extension>
    <extension
-         id="impp.safari.builder.problem"
-         name="impp Error"
+         id="problem"
+         name="Presentation Specification Error"
          point="org.eclipse.core.resources.markers">
       <super
             type="org.eclipse.core.resources.problemmarker">
@@ -81,14 +74,37 @@
             objectClass="org.eclipse.jdt.core.IJavaProject"
             adaptable="false"
             nameFilter="*"
-            id="impp.safari.projectContextMenu">
+            id="projectContextMenu">
          <action
-               label="Enable impp Builder"
-               tooltip="Enable the impp builder for this project"
+               label="Enable Presentation Specification Builder"
+               tooltip="Enable the Presentation Specification builder for this project"
                class="org.eclipse.imp.presentation.actions.EnableNature"
-               id="impp.safari.actions.enableNatureAction">
+               id="actions.enableNatureAction">
          </action>
       </objectContribution>
+   </extension>
+   <extension
+         point="org.eclipse.imp.runtime.modelTreeBuilder">
+      <treeBuilder
+            class="org.eclipse.imp.presentation.treeModelBuilder.PSPTreeModelBuilder"
+            language="psp">
+      </treeBuilder>
+   </extension>
+   <extension
+         point="org.eclipse.imp.runtime.labelProvider">
+      <labelProvider
+            class="org.eclipse.imp.presentation.treeModelBuilder.PSPLabelProvider"
+            language="psp">
+      </labelProvider>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
+            class="org.eclipse.imp.presentation.wizards.NewSpecWizard"
+            id="org.eclipse.imp.presentation.newPresentationSpec"
+            name="Presentation Specification (in progress)">
+      </wizard>
    </extension>
 
 </plugin>
