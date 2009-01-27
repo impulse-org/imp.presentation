@@ -48,7 +48,7 @@ public class PSPParseController extends SimpleLPGParseController implements IPar
         IPath fullFilePath= project.getRawProject().getLocation().append(filePath);
         createLexerAndParser(fullFilePath);
 
-        parser.setMessageHandler(new MessageHandlerAdapter(handler));
+        parser.getIPrsStream().setMessageHandler(new MessageHandlerAdapter(handler));
     }
 
     public IParser getParser() {

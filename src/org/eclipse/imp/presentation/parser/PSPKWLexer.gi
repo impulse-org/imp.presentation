@@ -1,8 +1,8 @@
 %options package=org.eclipse.imp.presentation.parser
-%options template=KeywordTemplate.gi
+%options template=KeywordTemplateF.gi
 
 %Include
-    KWLexerLowerCaseMap.gi
+    KWLexerLowerCaseMapF.gi
 %End
 
 %Export

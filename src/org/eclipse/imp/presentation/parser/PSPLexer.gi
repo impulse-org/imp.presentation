@@ -1,5 +1,5 @@
 %options package=org.eclipse.imp.presentation.parser
-%options template=LexerTemplate.gi
+%options template=LexerTemplateF.gi
 %options filter=PSPKWLexer.gi
 
 %Globals
@@ -14,7 +14,7 @@
 %End
 
 %Include
-    LexerBasicMap.gi
+    LexerBasicMapF.gi
 %End
 
 %Export
