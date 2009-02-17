@@ -103,6 +103,7 @@
             category="org.eclipse.imp.wizards/org.eclipse.imp.wizards.editor"
             class="org.eclipse.imp.presentation.wizards.NewSpecWizard"
             id="org.eclipse.imp.presentation.newPresentationSpec"
+            icon="icons/sample.gif"
             name="Presentation Specification (in progress)">
       </wizard>
    </extension>
