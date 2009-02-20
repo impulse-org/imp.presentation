@@ -29,12 +29,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.imp.builder.MarkerCreator;
-import org.eclipse.imp.language.ILanguageService;
 import org.eclipse.imp.language.Language;
 import org.eclipse.imp.language.LanguageRegistry;
-import org.eclipse.imp.language.ServiceFactory;
 import org.eclipse.imp.model.ISourceProject;
 import org.eclipse.imp.model.ModelFactory;
 import org.eclipse.imp.model.ModelFactory.ModelException;
@@ -99,14 +96,26 @@ import org.eclipse.pde.core.plugin.IPluginModel;
 import org.eclipse.pde.internal.core.bundle.BundlePluginModel;
 import org.eclipse.pde.internal.core.bundle.WorkspaceBundleModel;
 import org.eclipse.pde.internal.core.ibundle.IBundleModel;
-import org.eclipse.swt.SWT;
 import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
 
-import com.sun.tools.javac.util.Pair;
-
+/**
+ * This compiler translates a presentation specification file into a set of Java classes that 
+ * implement the interfaces associated with the various IMP extension points that govern IDE
+ * presentation appearance (e.g., token coloring, source folding, outlining).
+ * @author rmfuhrer
+ */
 public class PSPCompiler {
-    private static final String KW_ICON= "icon";
+	private static class Pair<T1,T2> {
+		public T1 fst;
+		public T2 snd;
+		public Pair(T1 v1, T2 v2) {
+			fst= v1;
+			snd= v2;
+		}
+	}
+
+	private static final String KW_ICON= "icon";
 
     private static final String KW_STYLE= "style";
 
