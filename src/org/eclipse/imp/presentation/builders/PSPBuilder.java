@@ -78,9 +78,6 @@ public class PSPBuilder extends BuilderBase {
      *         same file.
      */
     protected boolean isNonRootSourceFile(IFile resource) {
-        // TODO: If your language has non-root source files (e.g., header files), then
-        // reimplement this method to test for those
-        System.err.println("PSPBuilder.isNonRootSourceFile(..) returning FALSE by default");
         return false;
     }
 
