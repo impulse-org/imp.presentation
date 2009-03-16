@@ -1,8 +1,8 @@
-package org.eclipse.imp.leg;
+package org.eclipse.imp.$LANG_NAME$;
 
-import leg.imp.parser.Ast.*;
+import $PARSER_PACKAGE$.Ast.*;
  
-language LEG {
+language $LANG_NAME$ {
     presentation {
         icon funcIcon  = "function.gif";
         icon blockIcon = "block.gif";
