@@ -10,10 +10,10 @@
 		<mkdir dir="${temp.folder}/${plugin.jar.name}.bin"/>
 		<!-- run lpg to generate the parser and lexer -->
 		<echo message="Running LPG to generate parser and lexer"/>
-		<exec executable="${lpg.executable}" dir="src/org/eclipse/imp/presentation"
-		      failonerror="true" output="LangSpec.log">
+		<exec executable="${lpg.executable}" dir="src/org/eclipse/imp/presentation/parser"
+		      failonerror="true" output="PSPParser.log">
 			<arg line="-include-directory=${lpg.templates};${lpg.include}"/>
-			<arg line="LangSpec.g"/>
+			<arg line="PSPParser.g"/>
 		</exec>
 		<echo message="eclipse.build.path = ${eclipse.build.path}"/>
 		<!-- compile the source code -->
@@ -33,11 +33,10 @@
 		<copy todir="${temp.folder}/${plugin.jar.name}.bin/icons" failonerror="true" overwrite="false">
 			<fileset dir="icons/"/>
 		</copy>
-<!--	<mkdir dir="${temp.folder}/${plugin.jar.name}.bin/templates"/>
+	    <mkdir dir="${temp.folder}/${plugin.jar.name}.bin/templates"/>
 		<copy todir="${temp.folder}/${plugin.jar.name}.bin/templates" failonerror="true" overwrite="false">
 			<fileset dir="templates/"/>
 		</copy>
-  -->
 		<copy file="plugin.xml" todir="${temp.folder}/${plugin.jar.name}.bin" failonerror="true"/>
 		<mkdir dir="${build.result.folder}"/>
 		<jar destfile="${build.result.folder}/${plugin.jar.name}" basedir="${temp.folder}/${plugin.jar.name}.bin"
