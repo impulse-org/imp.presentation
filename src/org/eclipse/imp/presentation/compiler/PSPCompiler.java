@@ -232,12 +232,20 @@ public class PSPCompiler {
             result= false;
         }
         languageSpec langSpec= astRoot.getlanguageSpecList().getlanguageSpecAt(0);
+        String langName= langSpec.getlangName().toString();
 
-        fLanguage= LanguageRegistry.findLanguage(langSpec.getlangName().toString());
+        fLanguage= LanguageRegistry.findLanguage(langName);
 
         if (fLanguage == null) {
-            createErrorMarker(langSpec.getlangName(), "Non-existent language name");
-            result= false;
+            // TODO Look in other projects in the workspace
+            String projLangName= WizardUtilities.discoverLanguageForProject(fProject);
+
+            if (projLangName != null && projLangName.equals(langName)) {
+                fLanguage= new Language(projLangName, "", "", "", "", "", "", null);
+            } else {
+                createErrorMarker(langSpec.getlangName(), "Non-existent language: " + langName);
+                result= false;
+            }
         }
 
         languageBody langBody= langSpec.getlanguageBody();
@@ -373,7 +381,7 @@ public class PSPCompiler {
                     String iconPath= stripQuotes(exprToString(rd.getinitializer()));
                     resNameToIconPath.put(resName, iconPath);
                     if (fProject.findMember(iconPath) == null) {
-                        createErrorMarker(rd, "Icon '" + iconPath + "' does not exist.");
+                        createErrorMarker(rd, "Icon '" + iconPath + "' does not exist in project " + fProject.getName() + ".");
                     }
                 } else {
                     createErrorMarker(rd, "Invalid resource type for coloring spec: " + resType);
