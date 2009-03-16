@@ -22,11 +22,11 @@ public class NewSpecWizard extends GeneratedComponentWizard {
     private static final String WIZARD_NAME = "New Presentation Specification";
     private static final String WIZARD_DESCRIPTION = "Creates a new IMP presentation specification file";
 
-    public NewSpecWizard() {
-        // TODO Auto-generated constructor stub
-    }
-
     protected NewPresentationSpecPage thePage = null;
+
+    protected String fSpecFileName = null;
+
+    public NewSpecWizard() { }
 
     @Override
     public void addPages() {
@@ -45,16 +45,23 @@ public class NewSpecWizard extends GeneratedComponentWizard {
     @Override
     protected void collectCodeParms() {
         super.collectCodeParms();
+
+        WizardPageField specFileField= pages[0].getField("Spec File");
+
+        if (specFileField != null) {
+            fSpecFileName= specFileField.getText();
+        } else {
+            fSpecFileName= "";
+        }
     }
 
     @Override
     protected void generateCodeStubs(IProgressMonitor mon) throws CoreException {
         Map<String, String> subs= getStandardSubstitutions(fProject);
-        String presentationSpecName= subs.get("$LANG_NAME$") + ".psp";
 
         new PSPNature().addToProject(fProject);
 
-        IFile specFile= createFileFromTemplate(presentationSpecName, PSPActivator.kPluginID, "presentation.psp", fPackageFolder, subs, fProject, mon);
+        IFile specFile= createFileFromTemplate(fSpecFileName, PSPActivator.kPluginID, "presentation.psp", fPackageFolder, subs, fProject, mon);
 
         this.editFile(mon, specFile);
     }
