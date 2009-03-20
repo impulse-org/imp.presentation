@@ -103,7 +103,7 @@ import org.eclipse.text.edits.TextEdit;
  * This compiler translates a presentation specification file into a set of Java classes that 
  * implement the interfaces associated with the various IMP extension points that govern IDE
  * presentation appearance (e.g., token coloring, source folding, outlining).
- * @author rmfuhrer
+ * @author rfuhrer@watson.ibm.com
  */
 public class PSPCompiler {
 	private static class Pair<T1,T2> {
@@ -260,25 +260,33 @@ public class PSPCompiler {
             createErrorMarker((ASTNode) coloringMembers.get(1), "Only one text coloring specification is allowed per language");
             result= false;
         } else {
-            fColoringSpec= (textColoringSpec) coloringMembers.get(0);
+            if (!coloringMembers.isEmpty()) {
+                fColoringSpec= (textColoringSpec) coloringMembers.get(0);
+            }
         }
         if (presMembers.size() > 1) {
             createErrorMarker((ASTNode) presMembers.get(1), "Only one presentation specification is allowed per language");
             result= false;
         } else {
-            fPresentationSpec= (presentationSpec) presMembers.get(0);
+            if (!presMembers.isEmpty()) {
+                fPresentationSpec= (presentationSpec) presMembers.get(0);
+            }
         }
         if (outlineMembers.size() > 1) {
             createErrorMarker((ASTNode) outlineMembers.get(1), "Only one outline specification is allowed per language");
             result= false;
         } else {
-            fOutlineSpec= (outlineSpec) outlineMembers.get(0);
+            if (!outlineMembers.isEmpty()) {
+                fOutlineSpec= (outlineSpec) outlineMembers.get(0);
+            }
         }
         if (foldingMembers.size() > 1) {
             createErrorMarker((ASTNode) foldingMembers.get(1), "Only one folding specification is allowed per language");
             result= false;
         } else {
-            fFoldingSpec= (foldingSpec) foldingMembers.get(0);
+            if (!foldingMembers.isEmpty()) {
+                fFoldingSpec= (foldingSpec) foldingMembers.get(0);
+            }
         }
         return result;
     }
@@ -309,6 +317,8 @@ public class PSPCompiler {
     }
 
     private void createLabelProvider(compilationUnit astRoot, IPath srcFolderPath, String basePkgName, IProgressMonitor mon) {
+        if (fPresentationSpec == null)
+            return;
         Map<String,String> subs= defineStandardSubstitutions(astRoot);
         String pkgName= basePkgName.concat(".labelProvider");
         String lpClassName= fLanguage.getName().concat("LabelProvider");
@@ -469,6 +479,8 @@ public class PSPCompiler {
     }
 
     private void createTokenColorer(compilationUnit astRoot, IPath srcFolderPath, String basePkgName, IProgressMonitor mon) {
+        if (fColoringSpec == null)
+            return;
         Map<String,String> subs= defineStandardSubstitutions(astRoot);
         String pkgName= basePkgName.concat(".tokenColorer");
         String className= fLanguage.getName().concat("TokenColorer");
@@ -587,6 +599,8 @@ public class PSPCompiler {
         "        }\n";
 
     private void createModelBuilder(compilationUnit astRoot, IPath srcFolderPath, String basePkgName, IProgressMonitor mon) {
+        if (fOutlineSpec == null)
+            return;
         String pkgName= basePkgName.concat(".treeModelBuilder");
         String className= fLanguage.getName().concat("ModelBuilder");
         Map<String,String> subs= defineStandardSubstitutions(astRoot);
@@ -621,6 +635,8 @@ public class PSPCompiler {
     private String fParseCtlrName;
 
     private void createFoldingUpdater(compilationUnit astRoot, IPath srcFolderPath, String basePkgName, IProgressMonitor mon) {
+        if (fFoldingSpec == null)
+            return;
         String pkgName= basePkgName.concat(".foldingUpdater");
         String className= fLanguage.getName().concat("FoldingUpdater");
         Map<String,String> subs= defineStandardSubstitutions(astRoot);
@@ -677,6 +693,8 @@ public class PSPCompiler {
                     break;
                 }
             }
+            if (fParseCtlrPkg == null)
+                return;
         }
         subs.put("$PARSER_PKG$", fParseCtlrPkg);
         subs.put("$PARSE_CONTROLLER_CLASS_NAME$", fParseCtlrName);
@@ -894,6 +912,12 @@ public class PSPCompiler {
 
     private void createExtensions(IProject project, compilationUnit astRoot, IProgressMonitor mon) {
         fPluginModel= ExtensionPointEnabler.getPluginModel(project);
+
+        if (fPluginModel == null) {
+            PSPActivator.getInstance().writeErrorMsg("Error locating plugin model for project '" + fProject.getName() + "'");
+            return;
+        }
+
         // SMS 30 Jul 2008
         if (fPluginModel instanceof BundlePluginModel) {
             BundlePluginModel bpm = (BundlePluginModel) fPluginModel;
