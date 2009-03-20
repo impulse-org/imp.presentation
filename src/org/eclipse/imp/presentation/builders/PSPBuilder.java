@@ -6,6 +6,8 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 import org.eclipse.imp.builder.BuilderUtils;
 import org.eclipse.imp.builder.MarkerCreator;
@@ -86,9 +88,6 @@ public class PSPBuilder extends BuilderBase {
      * <code>fDependency.addDependency()</code>.
      */
     protected void collectDependencies(IFile file) {
-        // TODO: If your language has inter-file dependencies then reimplement
-        // this method to collect those
-        System.err.println("PSPBuilder.collectDependencies(..) doing nothing by default");
         return;
     }
 
@@ -99,7 +98,7 @@ public class PSPBuilder extends BuilderBase {
     protected void compile(final IFile file, IProgressMonitor monitor) {
         try {
             // START_HERE
-            System.out.println("Builder.compile with file = " + file.getName());
+            getConsoleStream().println("Builder.compile with file = " + file.getName());
             PSPCompiler compiler= new PSPCompiler(this, PROBLEM_MARKER_ID);
             compiler.compile(file, monitor);
             doRefresh(file.getParent());
@@ -130,7 +129,8 @@ public class PSPBuilder extends BuilderBase {
             try {
                 sourceProject= ModelFactory.open(project);
             } catch (ModelException me) {
-                System.err.println("PSPParseController.runParserForComplier(..):  Model exception:\n" + me.getMessage() + "\nReturning without parsing");
+                PSPActivator.getInstance().getLog().log(new Status(IStatus.ERROR, PSPActivator.kPluginID,
+                        "PSPParseController.runParserForCompiler(..): Model exception:\n" + me.getMessage() + "\nReturning without parsing", me));
                 return;
             }
             parseController.initialize(file.getProjectRelativePath(), sourceProject, markerCreator);
