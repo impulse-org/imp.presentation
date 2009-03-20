@@ -16,7 +16,7 @@ public class PSPKWLexerprs implements lpg.runtime.ParseTable, PSPKWLexersym {
     public final static int NUM_STATES = 99;
     public final int getNumStates() { return NUM_STATES; }
 
-    public final static int NT_OFFSET = 29;
+    public final static int NT_OFFSET = 30;
     public final int getNtOffset() { return NT_OFFSET; }
 
     public final static int LA_STATE_OFFSET = 147;
@@ -31,7 +31,7 @@ public class PSPKWLexerprs implements lpg.runtime.ParseTable, PSPKWLexersym {
     public final static int NUM_NONTERMINALS = 2;
     public final int getNumNonterminals() { return NUM_NONTERMINALS; }
 
-    public final static int NUM_SYMBOLS = 31;
+    public final static int NUM_SYMBOLS = 32;
     public final int getNumSymbols() { return NUM_SYMBOLS; }
 
     public final static int SEGMENT_SIZE = 8192;
@@ -46,7 +46,7 @@ public class PSPKWLexerprs implements lpg.runtime.ParseTable, PSPKWLexersym {
     public final static int EOFT_SYMBOL = 21;
     public final int getEoftSymbol() { return EOFT_SYMBOL; }
 
-    public final static int EOLT_SYMBOL = 30;
+    public final static int EOLT_SYMBOL = 31;
     public final int getEoltSymbol() { return EOLT_SYMBOL; }
 
     public final static int ACCEPT_ACTION = 124;
@@ -67,7 +67,7 @@ public class PSPKWLexerprs implements lpg.runtime.ParseTable, PSPKWLexersym {
             0,0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,0,0,
-            0
+            0,0
         };
     };
     public final static byte isNullable[] = IsNullable.isNullable;
@@ -85,7 +85,7 @@ public class PSPKWLexerprs implements lpg.runtime.ParseTable, PSPKWLexersym {
         public final static byte isKeyword[] = {0,
             0,0,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0,0,0
+            0,0,0,0,0,0,0,0,0,0
         };
     };
     public final static byte isKeyword[] = IsKeyword.isKeyword;
@@ -151,7 +151,7 @@ public class PSPKWLexerprs implements lpg.runtime.ParseTable, PSPKWLexersym {
             6,12,0,1,0,1,0,0,9,2,
             0,5,0,0,0,0,0,0,0,0,
             0,0,0,0,0,0,0,0,0,0,
-            0,0,0,0,0,0,0
+            0,0,0,0,0,0,0,0
         };
     };
     public final static byte termCheck[] = TermCheck.termCheck;

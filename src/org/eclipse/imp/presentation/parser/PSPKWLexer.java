@@ -40,8 +40,9 @@ public class PSPKWLexer extends PSPKWLexerprs
     static
     {
         tokenKind['$'] = PSPKWLexersym.Char_DollarSign;
+        tokenKind['%'] = PSPKWLexersym.Char_Percent;
         tokenKind['_'] = PSPKWLexersym.Char__;
-
+        
         tokenKind['a'] = PSPKWLexersym.Char_a;
         tokenKind['b'] = PSPKWLexersym.Char_b;
         tokenKind['c'] = PSPKWLexersym.Char_c;
