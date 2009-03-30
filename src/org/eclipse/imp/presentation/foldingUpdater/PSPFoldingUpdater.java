@@ -80,6 +80,6 @@ public class PSPFoldingUpdater extends LPGFolderBase {
         prsStream= theAST.getLeftIToken().getPrsStream();
         AbstractVisitor abstractVisitor= new FoldingVisitor();
         theAST.accept(abstractVisitor);
-        makeAdjunctAnnotations();
+        makeAdjunctsFoldable();
     }
 }
