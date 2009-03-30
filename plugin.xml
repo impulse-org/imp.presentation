@@ -40,10 +40,6 @@
       <builder>
          <run
                class="org.eclipse.imp.presentation.builders.PSPBuilder">
-            <parameter
-                  name="foo"
-                  value="bar">
-            </parameter>
          </run>
       </builder>
    </extension>
@@ -77,7 +73,9 @@
             id="projectContextMenu">
          <action
                label="Enable Presentation Specification Builder"
+               menubarPath="org.eclipse.imp.metatooling.projectContextMenu/group1"
                tooltip="Enable the Presentation Specification builder for this project"
+               icon="icons/builderEnable.gif"
                class="org.eclipse.imp.presentation.actions.EnableNature"
                id="actions.enableNatureAction">
          </action>
