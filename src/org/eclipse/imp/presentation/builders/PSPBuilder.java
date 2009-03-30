@@ -1,28 +1,17 @@
 package org.eclipse.imp.presentation.builders;
 
 import java.util.Collection;
+
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-
-import org.eclipse.imp.builder.BuilderUtils;
-import org.eclipse.imp.builder.MarkerCreator;
 import org.eclipse.imp.builder.BuilderBase;
 import org.eclipse.imp.language.Language;
 import org.eclipse.imp.language.LanguageRegistry;
-import org.eclipse.imp.model.ISourceProject;
-import org.eclipse.imp.model.ModelFactory;
-import org.eclipse.imp.model.ModelFactory.ModelException;
-import org.eclipse.imp.parser.IParseController;
-import org.eclipse.imp.runtime.PluginBase;
-
 import org.eclipse.imp.presentation.PSPActivator;
 import org.eclipse.imp.presentation.compiler.PSPCompiler;
-import org.eclipse.imp.presentation.parser.PSPParseController;
+import org.eclipse.imp.runtime.PluginBase;
 
 /**
  * @author
@@ -105,44 +94,6 @@ public class PSPBuilder extends BuilderBase {
         } catch (Exception e) {
             getPlugin().writeErrorMsg(e.getMessage());
 
-            e.printStackTrace();
-        }
-    }
-
-    protected void runParserForCompiler(final IFile file, IProgressMonitor monitor) {
-        try {
-            // Parse controller is the "compiler" here; parses and reports errors
-            IParseController parseController= new PSPParseController();
-
-            // Marker creator handles error messages from the parse controller (and
-            // uses the parse controller to get additional information about the errors)
-            MarkerCreator markerCreator= new MarkerCreator(file, parseController, PROBLEM_MARKER_ID);
-
-            // If we have a kind of parser that might be receptive, tell it
-            // what types of problem marker the builder will create
-            parseController.getAnnotationTypeInfo().addProblemMarkerType(getErrorMarkerID());
-
-            // Need to tell the parse controller which file in which project to parse
-            // and also the message handler to which to report errors
-            IProject project= file.getProject();
-            ISourceProject sourceProject= null;
-            try {
-                sourceProject= ModelFactory.open(project);
-            } catch (ModelException me) {
-                PSPActivator.getInstance().getLog().log(new Status(IStatus.ERROR, PSPActivator.kPluginID,
-                        "PSPParseController.runParserForCompiler(..): Model exception:\n" + me.getMessage() + "\nReturning without parsing", me));
-                return;
-            }
-            parseController.initialize(file.getProjectRelativePath(), sourceProject, markerCreator);
-
-            String contents= BuilderUtils.getFileContents(file);
-
-            // Finally parse it
-            parseController.parse(contents, false, monitor);
-
-            doRefresh(file.getParent());
-        } catch (Exception e) {
-            getPlugin().writeErrorMsg(e.getMessage());
             e.printStackTrace();
         }
     }
