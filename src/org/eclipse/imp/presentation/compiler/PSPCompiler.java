@@ -241,7 +241,7 @@ public class PSPCompiler {
             String projLangName= WizardUtilities.discoverLanguageForProject(fProject);
 
             if (projLangName != null && projLangName.equals(langName)) {
-                fLanguage= new Language(projLangName, "", "", "", "", "", "", null);
+                fLanguage= new Language(projLangName, "", "", "", "", "", "", "", "", null);
             } else {
                 createErrorMarker(langSpec.getlangName(), "Non-existent language: " + langName);
                 result= false;
@@ -903,7 +903,7 @@ public class PSPCompiler {
 
         parseController.initialize(file.getProjectRelativePath(), fSrcProject, markerCreator);
 
-        parseController.parse(getFileContents(file), false, mon);
+        parseController.parse(getFileContents(file), mon);
 
         compilationUnit astRoot= (compilationUnit) parseController.getCurrentAst();
 
