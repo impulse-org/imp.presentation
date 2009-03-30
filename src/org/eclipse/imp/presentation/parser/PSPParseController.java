@@ -1,24 +1,17 @@
 package org.eclipse.imp.presentation.parser;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.imp.model.ISourceProject;
-import org.eclipse.imp.parser.ILexer;
 import org.eclipse.imp.parser.IMessageHandler;
 import org.eclipse.imp.parser.IParseController;
-import org.eclipse.imp.parser.IParser;
-import org.eclipse.imp.parser.ISourcePositionLocator;
 import org.eclipse.imp.parser.MessageHandlerAdapter;
 import org.eclipse.imp.parser.SimpleLPGParseController;
 import org.eclipse.imp.presentation.PSPActivator;
 import org.eclipse.imp.presentation.parser.Ast.ASTNode;
 import org.eclipse.imp.services.ILanguageSyntaxProperties;
-import org.eclipse.imp.utils.StreamUtils;
 
 /**
  * @author Stan Sutton (suttons@us.ibm.com) (for the following modifications)
@@ -27,10 +20,6 @@ import org.eclipse.imp.utils.StreamUtils;
  * @since May 31, 2007 Adapted to extend SimpleLPGParseController
  */
 public class PSPParseController extends SimpleLPGParseController implements IParseController {
-    private PSPParser parser;
-
-    private PSPLexer lexer;
-
     public PSPParseController() {
         super(PSPActivator.kLanguageName);
     }
@@ -48,19 +37,7 @@ public class PSPParseController extends SimpleLPGParseController implements IPar
         IPath fullFilePath= project.getRawProject().getLocation().append(filePath);
         createLexerAndParser(fullFilePath);
 
-        parser.getIPrsStream().setMessageHandler(new MessageHandlerAdapter(handler));
-    }
-
-    public IParser getParser() {
-        return parser;
-    }
-
-    public ILexer getLexer() {
-        return lexer;
-    }
-
-    public ISourcePositionLocator getNodeLocator() {
-        return new PSPASTNodeLocator();
+        fParser.getIPrsStream().setMessageHandler(new MessageHandlerAdapter(handler));
     }
 
     public ILanguageSyntaxProperties getSyntaxProperties() {
@@ -69,38 +46,26 @@ public class PSPParseController extends SimpleLPGParseController implements IPar
 
     private void createLexerAndParser(IPath filePath) {
         try {
-            lexer= new PSPLexer(filePath.toOSString()); // Create the lexer
-            parser= new PSPParser(lexer.getLexStream() /* , project */); // Create the parser
+            fLexer= new PSPLexer(filePath.toOSString());
+            fParser= new PSPParser(fLexer.getILexStream() /* , project */);
         } catch (IOException e) {
             throw new Error(e);
         }
     }
 
-    public Object parse(IProgressMonitor monitor) {
-        try {
-            File file= new File(fProject.getRawProject().getLocation().append(fFilePath).toOSString());
-            String source= StreamUtils.readStreamContents(new FileInputStream(file));
-
-            return parse(source, false, monitor);
-        } catch (FileNotFoundException e) {
-            PSPActivator.getInstance().logException("Unable to parse input", e);
-            return null;
-        }
-    }
-
-    public Object parse(String contents, boolean scanOnly, IProgressMonitor monitor) {
+    public Object parse(String contents, IProgressMonitor monitor) {
         PMMonitor my_monitor= new PMMonitor(monitor);
         char[] contentsArray= contents.toCharArray();
 
-        lexer.initialize(contentsArray, fFilePath.toPortableString());
-        parser.getParseStream().resetTokenStream();
+        fLexer.reset(contentsArray, fFilePath.toPortableString());
+        fParser.getIPrsStream().resetTokenStream();
 
-        lexer.lexer(my_monitor, parser.getParseStream()); // Lex the stream to produce the token stream
+        fLexer.lexer(my_monitor, fParser.getIPrsStream()); // Lex the stream to produce the token stream
         if (my_monitor.isCancelled())
             return fCurrentAst; // TODO fCurrentAst might (probably will) be inconsistent wrt the lex stream now
 
-        fCurrentAst= (ASTNode) parser.parser(my_monitor, 0);
-        parser.resolve((ASTNode) fCurrentAst);
+        fCurrentAst= (ASTNode) fParser.parser(my_monitor, 0);
+        ((PSPParser) fParser).resolve((ASTNode) fCurrentAst);
 
         cacheKeywordsOnce();
 
