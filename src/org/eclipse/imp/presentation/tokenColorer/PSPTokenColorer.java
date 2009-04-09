@@ -44,7 +44,7 @@ public class PSPTokenColorer extends TokenColorerBase implements PSPParsersym, I
         keywordAttribute= new TextAttribute(display.getSystemColor(SWT.COLOR_DARK_MAGENTA), null, SWT.BOLD);
     }
 
-    public IRegion calculateDamageExtent(IRegion seed) {
+    public IRegion calculateDamageExtent(IRegion seed, IParseController ctlr) {
         return seed;
     }
 }
