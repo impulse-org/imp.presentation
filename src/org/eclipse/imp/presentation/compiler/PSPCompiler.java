@@ -78,7 +78,7 @@ import org.eclipse.imp.presentation.parser.Ast.textColoringSpec;
 import org.eclipse.imp.presentation.parser.Ast.tokenDecl;
 import org.eclipse.imp.runtime.RuntimePlugin;
 import org.eclipse.imp.utils.StreamUtils;
-import org.eclipse.imp.wizards.ExtensionPointEnabler;
+import org.eclipse.imp.wizards.ExtensionEnabler;
 import org.eclipse.imp.wizards.WizardUtilities;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -911,7 +911,7 @@ public class PSPCompiler {
     }
 
     private void createExtensions(IProject project, compilationUnit astRoot, IProgressMonitor mon) {
-        fPluginModel= ExtensionPointEnabler.getPluginModel(project);
+        fPluginModel= ExtensionEnabler.getPluginModel(project);
 
         if (fPluginModel == null) {
             PSPActivator.getInstance().writeErrorMsg("Error locating plugin model for project '" + fProject.getName() + "'");
@@ -929,7 +929,7 @@ public class PSPCompiler {
 
         try {
             // Load the IMP way to get the complete model
-            ExtensionPointEnabler.loadImpExtensionsModel(fPluginModel, project);
+            ExtensionEnabler.loadImpExtensionsModel(fPluginModel, project);
 
             if (fPresentationSpec != null) {
                 removeOldExtensionsFor(fPluginModel, "org.eclipse.imp.labelProvider");
@@ -944,7 +944,7 @@ public class PSPCompiler {
                 removeOldExtensionsFor(fPluginModel, "org.eclipse.imp.tokenColorer");
             }
 
-            ExtensionPointEnabler.saveAndRefresh(fPluginModel);
+            ExtensionEnabler.saveAndRefresh(fPluginModel);
         } catch (CoreException e) {
             PSPActivator.getInstance().logException("Error adding extensions to project '" + fProject.getName() + "'", e);
         }
@@ -964,7 +964,7 @@ public class PSPCompiler {
     }
 
     private void createLabelExtension(IProject project, IProgressMonitor mon) {
-        ExtensionPointEnabler.enable(
+        ExtensionEnabler.enable(
                 project, "org.eclipse.imp.runtime", "labelProvider",
                 new String[][] {
                         { "labelProvider:id", "labelProvider" },
@@ -978,7 +978,7 @@ public class PSPCompiler {
     }
 
     private void createColorerExtension(IProject project, IProgressMonitor mon) {
-        ExtensionPointEnabler.enable(
+        ExtensionEnabler.enable(
                 project, "org.eclipse.imp.runtime", "tokenColorer",
                 new String[][] {
                         { "tokenColorer:id", "tokenColorer" },
@@ -992,7 +992,7 @@ public class PSPCompiler {
     }
 
     private void createOutlineExtension(IProject project, IProgressMonitor mon) {
-        ExtensionPointEnabler.enable(
+        ExtensionEnabler.enable(
                 project, "org.eclipse.imp.runtime", "modelTreeBuilder",
                 new String[][] {
                         { "treeBuilder:id", "treeBuilder" },
@@ -1006,7 +1006,7 @@ public class PSPCompiler {
     }
 
     private void createFoldingExtension(IProject project, IProgressMonitor mon) {
-        ExtensionPointEnabler.enable(
+        ExtensionEnabler.enable(
                 project, "org.eclipse.imp.runtime", "foldingUpdater",
                 new String[][] {
                         { "foldingUpdater:id", "foldingUpdater" },
