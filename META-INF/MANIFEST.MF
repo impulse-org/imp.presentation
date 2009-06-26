@@ -5,6 +5,7 @@ Bundle-SymbolicName: org.eclipse.imp.presentation;singleton:=true
 Bundle-Version: 0.1.6
 Bundle-Activator: org.eclipse.imp.presentation.PSPActivator
 Bundle-ActivationPolicy: lazy
+Eclipse-LazyStart: true
 Bundle-Vendor: rfuhrer@watson.ibm.com
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
