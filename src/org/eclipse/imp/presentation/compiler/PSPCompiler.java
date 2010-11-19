@@ -77,6 +77,7 @@ import org.eclipse.imp.presentation.parser.Ast.textColoringMemberList;
 import org.eclipse.imp.presentation.parser.Ast.textColoringSpec;
 import org.eclipse.imp.presentation.parser.Ast.tokenDecl;
 import org.eclipse.imp.runtime.RuntimePlugin;
+import org.eclipse.imp.utils.ExtensionPointUtils;
 import org.eclipse.imp.utils.StreamUtils;
 import org.eclipse.imp.wizards.ExtensionEnabler;
 import org.eclipse.imp.wizards.WizardUtilities;
@@ -238,7 +239,7 @@ public class PSPCompiler {
 
         if (fLanguage == null) {
             // TODO Look in other projects in the workspace
-            String projLangName= WizardUtilities.discoverLanguageForProject(fProject);
+            String projLangName= ExtensionPointUtils.discoverLanguageForProject(fProject);
 
             if (projLangName != null && projLangName.equals(langName)) {
                 fLanguage= new Language(projLangName, "", "", "", "", "", "", "", "", null);
